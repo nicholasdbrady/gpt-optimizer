@@ -24,3 +24,8 @@ dev = [
 
 [project.scripts]
 gpt-optimizer = "gpt_optimizer.__main__:main"
+
+[tool.pytest.ini_options]
+markers = [
+    "live: tests that make real API calls to Azure OpenAI (deselect with '-m \"not live\"')",
+]
