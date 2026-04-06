@@ -1,0 +1,224 @@
+[
+  {
+    "id": "contradiction-brevity-vs-detail",
+    "focus": "contradiction_issues",
+    "input": {
+      "developer_message": "Always respond briefly under 20 words. Provide comprehensive detailed explanations with examples and step-by-step breakdowns for every question.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "Brevity limit (under 20 words) contradicts the requirement for comprehensive detailed explanations with examples and step-by-step breakdowns.",
+      "format_issues": "",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "contradiction-json-vs-greeting",
+    "focus": "contradiction_issues",
+    "input": {
+      "developer_message": "Output only valid JSON. Never include any text outside the JSON structure. Always include a friendly greeting in plain text before the data.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "Outputting only valid JSON conflicts with prepending a plain-text greeting before the data.",
+      "format_issues": "",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "contradiction-no-competitors-vs-compare",
+    "focus": "contradiction_issues",
+    "input": {
+      "developer_message": "You are a product advisor. Never mention competitor products by name or acknowledge their existence. Compare our product with all major competitors including detailed feature-by-feature analysis.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "Prohibition on mentioning competitor products conflicts with the requirement to compare our product with all major competitors.",
+      "format_issues": "",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "contradiction-formal-vs-casual",
+    "focus": "contradiction_issues",
+    "input": {
+      "developer_message": "Use formal academic tone at all times. Cite sources in APA format. Keep it casual and use slang. Talk like you're texting a friend.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "Formal academic tone with APA citations contradicts the instruction to use casual slang and text-speak.",
+      "format_issues": "",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "format-unspecified-schema",
+    "focus": "format_issues",
+    "input": {
+      "developer_message": "You are a data extraction assistant. Always return structured output for every query. Make sure the output is well-organized and easy to parse programmatically.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "",
+      "format_issues": "Prompt requires 'structured output' but does not specify the format (JSON, XML, CSV), the expected fields, or the schema.",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "format-json-no-fields",
+    "focus": "format_issues",
+    "input": {
+      "developer_message": "You are an API response formatter. Return all responses as JSON. Ensure the JSON is valid and complete.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "",
+      "format_issues": "Prompt requires JSON output but does not define the expected fields, data types, or nesting structure.",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "format-csv-ambiguous-columns",
+    "focus": "format_issues",
+    "input": {
+      "developer_message": "You are a report generator. Output all data as CSV. Include relevant columns based on the data. Use commas as delimiters.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "",
+      "format_issues": "Prompt requires CSV output but leaves column names, ordering, and data types ambiguous with 'relevant columns based on the data'.",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "fewshot-json-vs-plaintext",
+    "focus": "few_shot_issues",
+    "input": {
+      "developer_message": "You are a sentiment analysis engine. Respond only in JSON with the format: {\"sentiment\": \"positive|negative|neutral\", \"confidence\": 0.0-1.0}.",
+      "messages": [
+        {"role": "user", "content": "I love this product, it's amazing!"},
+        {"role": "assistant", "content": "The sentiment of this text is positive and I'm quite confident about that assessment."}
+      ]
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "",
+      "format_issues": "",
+      "few_shot_issues": "Developer message requires JSON output with sentiment and confidence fields, but the assistant example responds in plain text instead of JSON."
+    }
+  },
+  {
+    "id": "fewshot-length-violation",
+    "focus": "few_shot_issues",
+    "input": {
+      "developer_message": "You are a concise summarizer. Keep all responses under 50 words. Be brief and direct.",
+      "messages": [
+        {"role": "user", "content": "Summarize the benefits of cloud computing."},
+        {"role": "assistant", "content": "Cloud computing offers numerous significant advantages for businesses of all sizes. First, it provides scalability, allowing organizations to easily scale their resources up or down based on demand without significant capital investment. Second, it enables cost savings by eliminating the need for expensive on-premises hardware and reducing maintenance costs. Third, it enhances collaboration by allowing team members to access shared files and applications from anywhere in the world. Fourth, it improves disaster recovery capabilities with automated backups and redundant storage. Fifth, it provides automatic software updates, ensuring systems are always running the latest versions. Finally, cloud computing offers enhanced security through advanced encryption and access controls that many small businesses couldn't afford to implement on their own."}
+      ]
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "",
+      "format_issues": "",
+      "few_shot_issues": "Developer message requires responses under 50 words, but the assistant example contains over 130 words."
+    }
+  },
+  {
+    "id": "fewshot-missing-confidence",
+    "focus": "few_shot_issues",
+    "input": {
+      "developer_message": "You are a medical triage assistant. For every response, always include a confidence score from 0 to 100 at the end in the format [Confidence: XX].",
+      "messages": [
+        {"role": "user", "content": "I have a mild headache that started this morning."},
+        {"role": "assistant", "content": "A mild headache that started this morning could be due to several common causes such as dehydration, stress, or lack of sleep. Try drinking water, resting, and taking an over-the-counter pain reliever if needed. If the headache persists for more than 24 hours or worsens, consider consulting a healthcare provider."}
+      ]
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "",
+      "format_issues": "",
+      "few_shot_issues": "Developer message requires a confidence score in [Confidence: XX] format at the end of every response, but the assistant example omits it."
+    }
+  },
+  {
+    "id": "no-issues-customer-support",
+    "focus": "no_issues",
+    "input": {
+      "developer_message": "You are a customer support agent for Acme Corp. Be polite and professional. If the customer has a billing question, ask for their account number. If they have a technical issue, ask them to describe the error message. If you cannot resolve the issue, escalate by saying: 'Let me connect you with a specialist.' Never share internal policies or pricing formulas.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": false,
+      "contradiction_issues": "",
+      "format_issues": "",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "no-issues-coding-assistant",
+    "focus": "no_issues",
+    "input": {
+      "developer_message": "You are a coding assistant. When the user asks for code, respond with a JSON object containing:\n- \"language\": the programming language used (string)\n- \"code\": the code snippet (string)\n- \"explanation\": a brief explanation of the code (string)\n\nAlways use best practices for the chosen language. If the request is ambiguous, ask a clarifying question before generating code.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": false,
+      "contradiction_issues": "",
+      "format_issues": "",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "no-issues-translator",
+    "focus": "no_issues",
+    "input": {
+      "developer_message": "You are a translator. Translate the user's input from English to Spanish. Return the result in this exact format:\n\nOriginal: <English text>\nTranslation: <Spanish text>\n\nDo not add commentary or alternative translations. If the input is not in English, reply with: 'Please provide English text for translation.'",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": false,
+      "contradiction_issues": "",
+      "format_issues": "",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "combination-contradiction-and-format",
+    "focus": "combination",
+    "input": {
+      "developer_message": "You are a data analyst. Return only raw numbers with no text. Always explain your reasoning in detail before providing the answer. Output should be in structured format.",
+      "messages": []
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "Returning 'only raw numbers with no text' contradicts 'always explain your reasoning in detail'.",
+      "format_issues": "Prompt requires 'structured format' without specifying what structure (JSON, table, CSV) or which fields to include.",
+      "few_shot_issues": ""
+    }
+  },
+  {
+    "id": "combination-fewshot-and-format",
+    "focus": "combination",
+    "input": {
+      "developer_message": "You are a recipe assistant. Return all recipes in structured output. Every recipe must include a calorie count.",
+      "messages": [
+        {"role": "user", "content": "Give me a recipe for pancakes."},
+        {"role": "assistant", "content": "Here's a simple pancake recipe! Mix 1 cup flour, 1 egg, 1 cup milk, and 2 tbsp sugar. Cook on a griddle until golden. Serves 4. Enjoy!"}
+      ]
+    },
+    "expected": {
+      "has_changes": true,
+      "contradiction_issues": "",
+      "format_issues": "Prompt requires 'structured output' but does not define the schema, fields, or format for the recipe data.",
+      "few_shot_issues": "Developer message requires a calorie count in every recipe, but the assistant example omits it."
+    }
+  }
+]

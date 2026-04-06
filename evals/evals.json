@@ -1,0 +1,76 @@
+{
+  "skill_name": "optimize-prompt",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Optimize this prompt for me: 'You are a customer support agent. Always respond in JSON format with keys: issue, resolution, confidence. Do not use any structured formats — respond conversationally in plain text. Keep responses under 100 words. Provide detailed explanations of at least 300 words for each issue.'",
+      "expected_output": "Should detect 2 contradictions (JSON vs plain text, 100 words vs 300 words)",
+      "files": [],
+      "expectations": [
+        "The output contains a JSON response with a new_developer_message field",
+        "The comments array contains at least one finding about the JSON vs plain text contradiction",
+        "The comments array contains at least one finding about the word count contradiction",
+        "The new_developer_message resolves both contradictions"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Check this prompt for issues: 'You are a Python coding assistant. Help users write clean, efficient Python code. When showing code, use markdown code blocks with syntax highlighting. Always explain your reasoning before showing code.'",
+      "expected_output": "Should report no issues found",
+      "files": [],
+      "expectations": [
+        "The output contains a JSON response",
+        "The issues_found field is false or null",
+        "The new_developer_message is very similar to the original (minor rewording at most)",
+        "The summary indicates no significant issues were found"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Optimize this system prompt: 'You are a data extraction assistant. Extract key information from documents and return it in a structured format. Include all relevant dates, names, and monetary amounts.'",
+      "expected_output": "Should flag the vague 'structured format' without specifying schema",
+      "files": [],
+      "expectations": [
+        "The output contains a JSON response with comments",
+        "At least one comment mentions the ambiguous or unspecified output format",
+        "The new_developer_message includes a clearer format specification or output schema",
+        "The new_developer_message preserves the original extraction intent"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Take this prompt and make it better for handling refund requests specifically: 'You are a customer support agent. Help users with their questions. Be professional and empathetic.'",
+      "expected_output": "Should apply the refund-specific customization",
+      "files": [],
+      "expectations": [
+        "The output contains a JSON response",
+        "The new_developer_message mentions refunds, returns, or refund processing",
+        "The new_developer_message preserves the professional and empathetic tone",
+        "The comments explain what was changed and why"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Do a thorough optimization of this prompt using pro mode:\n\n'You are a legal document reviewer. Review contracts for potential issues. Look at liability clauses, indemnification terms, intellectual property assignments, non-compete restrictions, termination provisions, and payment terms. Flag anything unusual or potentially problematic. Consider both the client perspective and standard industry practices. Output a summary of findings with risk ratings (low/medium/high) for each clause type. If a clause is missing entirely, note that as well. Be thorough but concise.'",
+      "expected_output": "Should run pro mode and improve structure/clarity",
+      "files": [],
+      "expectations": [
+        "The output contains a JSON response",
+        "The new_developer_message is meaningfully different from the original (not just minor word changes)",
+        "The new_developer_message preserves all clause types mentioned in the original",
+        "The comments contain multiple explanations of changes made"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Check this prompt for issues. The system prompt says 'Always respond with exactly one sentence.' but the example response is:\n\nUser: What is Python?\nAssistant: Python is a high-level programming language. It was created by Guido van Rossum. It is widely used for web development, data science, and automation.\n\nPlease optimize this.",
+      "expected_output": "Should detect the few-shot inconsistency (3 sentences vs required 1)",
+      "files": [],
+      "expectations": [
+        "The output contains a JSON response",
+        "At least one comment mentions the inconsistency between the one-sentence rule and the multi-sentence example",
+        "The new_messages array contains a corrected example with exactly one sentence"
+      ]
+    }
+  ]
+}

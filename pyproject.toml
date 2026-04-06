@@ -1,0 +1,28 @@
+[project]
+name = "gpt-optimizer"
+version = "0.1.0"
+description = "Programmatic prompt optimization using OpenAI's multi-agent approach"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.60.0",
+    "pydantic>=2.0",
+    "python-dotenv",
+]
+
+[project.optional-dependencies]
+web = [
+    "fastapi",
+    "uvicorn",
+]
+foundry = [
+    "azure-ai-projects>=2.0.0",
+    "azure-identity",
+]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
+
+[project.scripts]
+gpt-optimizer = "gpt_optimizer.__main__:main"

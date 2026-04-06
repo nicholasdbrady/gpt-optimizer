@@ -1,0 +1,82 @@
+[
+  {
+    "query": "optimize my prompt",
+    "should_trigger": true
+  },
+  {
+    "query": "hey can you take a look at my system message and improve it? it's not working great with gpt-5.4",
+    "should_trigger": true
+  },
+  {
+    "query": "check this prompt for contradictions: 'Always be brief. Provide comprehensive detailed answers.'",
+    "should_trigger": true
+  },
+  {
+    "query": "I have a developer message in /home/nbrady/prompts/agent.txt that needs to be refined",
+    "should_trigger": true
+  },
+  {
+    "query": "make this prompt better for handling customer complaints",
+    "should_trigger": true
+  },
+  {
+    "query": "my AI agent's instructions are unclear - can you rewrite them to be more specific?",
+    "should_trigger": true
+  },
+  {
+    "query": "run the prompt optimizer on this system prompt in pro mode",
+    "should_trigger": true
+  },
+  {
+    "query": "this prompt has some conflicting rules, find and fix them",
+    "should_trigger": true
+  },
+  {
+    "query": "optimize for gpt-5.4: You are a helpful coding assistant that reviews pull requests",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to improve my chatbot's system message - it keeps giving inconsistent responses",
+    "should_trigger": true
+  },
+  {
+    "query": "write me a new prompt for a customer service bot",
+    "should_trigger": false
+  },
+  {
+    "query": "what are best practices for prompt engineering?",
+    "should_trigger": false
+  },
+  {
+    "query": "help me debug this Python function",
+    "should_trigger": false
+  },
+  {
+    "query": "summarize this document for me",
+    "should_trigger": false
+  },
+  {
+    "query": "can you review my code for bugs?",
+    "should_trigger": false
+  },
+  {
+    "query": "translate this text to Spanish",
+    "should_trigger": false
+  },
+  {
+    "query": "create a new API endpoint for user authentication",
+    "should_trigger": false
+  },
+  {
+    "query": "explain how GPT-5.4 works",
+    "should_trigger": false
+  },
+  {
+    "query": "format this JSON data nicely",
+    "should_trigger": false
+  },
+  {
+    "query": "write unit tests for my optimizer module",
+    "should_trigger": false
+  }
+]

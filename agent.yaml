@@ -1,0 +1,92 @@
+# Foundry Agent Definition for GPT Prompt Optimizer
+#
+# This YAML file defines the agent configuration for deploying the prompt optimizer
+# as a Microsoft Foundry agent.
+#
+# Deploy using: python foundry_setup.py
+# Or manually via: azd deploy --name prompt-optimizer
+
+name: prompt-optimizer
+display_name: GPT Prompt Optimizer
+description: Optimizes user prompts for clarity, consistency, and format compliance
+version: "1.0.0"
+
+# Model configuration
+model: gpt-5-mini
+
+# Agent instructions
+instructions: |
+  You are an expert prompt engineer and optimization specialist.
+  Your role is to help users improve their prompts for clarity, consistency, and format compliance.
+  Analyze prompts for potential ambiguities, conflicting instructions, and formatting issues.
+  Provide actionable suggestions to enhance prompt quality and effectiveness.
+  Focus on improving user intent clarity, reducing hallucination, and ensuring structured outputs.
+
+# Available tools
+tools:
+  - type: function
+    function:
+      name: optimize_prompt
+      description: Optimize a developer or system prompt for clarity, consistency, and format compliance
+      parameters:
+        type: object
+        properties:
+          developer_message:
+            type: string
+            description: The prompt text to be optimized
+          optimizer_mode:
+            type: string
+            enum:
+              - instant
+              - default
+              - pro
+            description: |
+              Optimization speed/depth tradeoff:
+              - instant: Quick feedback focusing on obvious issues
+              - default: Balanced analysis with key improvements
+              - pro: Deep analysis with comprehensive recommendations
+          preset_check:
+            type: string
+            enum:
+              - conflicting_instructions
+              - ambiguity
+              - output_format
+            description: |
+              Optional targeted consistency check:
+              - conflicting_instructions: Detect contradictory directives
+              - ambiguity: Find unclear or vague language
+              - output_format: Validate structured output specifications
+          requested_changes:
+            type: string
+            description: Custom optimization instruction for specific requirements or constraints
+        required:
+          - developer_message
+
+# Deployment settings
+deployment:
+  # Enable streaming responses
+  streaming: true
+  
+  # Temperature for response generation (0-2)
+  # Lower values = more deterministic, higher = more creative
+  temperature: 0.7
+  
+  # Maximum tokens in response
+  max_tokens: 4096
+  
+  # Enable logging for debugging
+  logging_enabled: true
+
+# Metadata
+metadata:
+  author: GPT Optimizer Project
+  category: Prompt Engineering
+  tags:
+    - prompt-optimization
+    - quality-assurance
+    - developer-tools
+  capabilities:
+    - prompt-analysis
+    - consistency-checking
+    - format-validation
+    - improvement-suggestions
