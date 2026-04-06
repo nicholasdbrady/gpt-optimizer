@@ -40,6 +40,153 @@ result = optimize_prompt(
 )
 ```
 
+### End-to-End Examples
+
+These walkthroughs show real input and output captured from live runs against Azure OpenAI gpt-5.4.
+
+<details>
+<summary><strong>Example 1: Detecting and resolving contradictions</strong></summary>
+
+A prompt that says "always return JSON" but also "respond in plain text only":
+
+**Python:**
+```python
+from gpt_optimizer import optimize_prompt
+
+result = optimize_prompt(
+    "You are a data extraction assistant. Always return results as valid JSON objects. "
+    "Do not use any structured or formatted output — respond in plain conversational "
+    "text only. Include all extracted fields in your response."
+)
+```
+
+**CLI:**
+```bash
+python -m gpt_optimizer "You are a data extraction assistant. Always return results as valid JSON objects. Do not use any structured or formatted output — respond in plain conversational text only. Include all extracted fields in your response."
+```
+
+**Output:**
+```
+────────────────────────────────────────────────────────────
+  Applied a full optimize pass with 7 change(s).
+────────────────────────────────────────────────────────────
+
+Changes:
+  ⚠️  Contradiction: The prompt says to "Always return results as valid JSON
+     objects" but also says "Do not use any structured or formatted output —
+     respond in plain conversational text only"; valid JSON is structured
+     output, so both cannot be followed simultaneously.
+  ⚠️  Format: No JSON schema or required field list is specified.
+  ⚠️  Format: Data types for the "extracted fields" are unspecified.
+  ⚠️  Format: Error-handling is not specified for missing fields.
+  ✏️  Rewrote developer prompt to resolve detected issues.
+```
+
+**Optimized prompt:**
+```
+You are a data extraction assistant. Always return results as valid JSON
+objects. Include all extracted fields in your response.
+
+## Output Format
+Return a single valid JSON object containing all extracted fields.
+- Use JSON key-value pairs for each extracted field.
+- If a field is missing, ambiguous, or cannot be extracted, use null.
+- Return only the JSON object and no additional text.
+```
+
+**What happened:** The optimizer detected the contradiction between "JSON objects" and "plain text only", removed the conflicting clause, and added a concrete `## Output Format` section with field-level guidance.
+
+</details>
+
+<details>
+<summary><strong>Example 2: Applying custom changes</strong></summary>
+
+Specialize a generic support prompt for billing disputes:
+
+**Python:**
+```python
+from gpt_optimizer import optimize_prompt
+
+result = optimize_prompt(
+    "You are a customer support agent. Help users with their questions. "
+    "Be professional and empathetic. Always acknowledge the customer's "
+    "concern before providing a solution.",
+    requested_changes="specialize this prompt for handling billing disputes and refund requests"
+)
+```
+
+**CLI:**
+```bash
+python -m gpt_optimizer "You are a customer support agent. Help users with their questions. Be professional and empathetic. Always acknowledge the customer's concern before providing a solution." --changes "specialize this prompt for handling billing disputes and refund requests"
+```
+
+**JSON output** (`--json`):
+```json
+{
+  "new_developer_message": "You are a customer support agent specializing in billing disputes and refund requests. Help users with their questions about charges, billing issues, and refunds. Be professional and empathetic. Always acknowledge the customer's concern before providing a solution.",
+  "summary": "Applied custom optimization: specialize this prompt for handling billing disputes and refund requests",
+  "comments": [
+    {
+      "kind": "explanation",
+      "reason": "Applied requested changes: specialize this prompt for handling billing disputes and refund requests"
+    }
+  ],
+  "operation_mode": "custom"
+}
+```
+
+**What happened:** The optimizer added "specializing in billing disputes and refund requests" and "about charges, billing issues, and refunds" while preserving the original professional/empathetic tone.
+
+</details>
+
+<details>
+<summary><strong>Example 3: Targeted conflict check</strong></summary>
+
+Find the word-count contradiction without doing a full optimization:
+
+**Python:**
+```python
+from gpt_optimizer import optimize_prompt, PresetCheck
+
+result = optimize_prompt(
+    "You are a research summarizer. Keep all answers under 50 words. "
+    "Provide thorough, detailed explanations of at least 500 words for every topic.",
+    preset_check=PresetCheck.conflicting_instructions,
+)
+print(result.issues_found)  # True
+print(result.preset_check)  # "conflicting_instructions"
+```
+
+**CLI:**
+```bash
+python -m gpt_optimizer "You are a research summarizer. Keep all answers under 50 words. Provide thorough, detailed explanations of at least 500 words for every topic." --check conflicts --json
+```
+
+**JSON output:**
+```json
+{
+  "issues_found": true,
+  "operation_mode": "preset_check",
+  "preset_check": "conflicting_instructions",
+  "comments": [
+    {
+      "kind": "finding",
+      "reason": "\"Keep all answers under 50 words\" contradicts \"Provide thorough, detailed explanations of at least 500 words for every topic,\" since a response cannot be both under 50 words and at least 500 words."
+    },
+    {
+      "kind": "explanation",
+      "reason": "Rewrote prompt to resolve 1 issue(s)."
+    }
+  ],
+  "new_developer_message": "You are a research summarizer. Provide thorough, detailed explanations of at least 500 words for every topic.",
+  "summary": "conflicting_instructions check found 1 issue(s)."
+}
+```
+
+**What happened:** The targeted check found the 50-word vs 500-word conflict and resolved it by keeping the 500-word clause (which better preserves the "thorough" intent).
+
+</details>
+
 ### CLI
 
 ```bash
