@@ -109,7 +109,7 @@ After presenting results, offer these options so the user knows what's possible 
 
 ## Environment
 
-The optimizer uses `gpt-5.4` via Azure OpenAI (endpoint: `https://swdn-resource.openai.azure.com/openai/v1/`).
+The optimizer uses `gpt-5.4` via Azure OpenAI. Set `AZURE_OPENAI_ENDPOINT` in your `.env` file.
 
 **Authentication**: Run `az login` for Microsoft Entra ID (default). Alternatively, pass `--api-key <key>` for direct API key auth.
 

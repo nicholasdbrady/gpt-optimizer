@@ -15,11 +15,11 @@ DEFAULT_MODEL = os.environ.get("OPTIMIZER_MODEL", "gpt-5.4")
 
 AZURE_OPENAI_ENDPOINT = os.environ.get(
     "AZURE_OPENAI_ENDPOINT",
-    "https://swdn-resource.openai.azure.com/openai/v1/",
+    "",
 )
 AZURE_AI_PROJECT_ENDPOINT = os.environ.get(
     "AZURE_AI_PROJECT_ENDPOINT",
-    "https://swdn-resource.services.ai.azure.com/api/projects/foundry-project",
+    "",
 )
 
 
@@ -30,7 +30,7 @@ def get_openai_client(api_key: str | None = None) -> OpenAI:
       1. Explicit api_key → used directly with Azure OpenAI endpoint
       2. DefaultAzureCredential (az login) → Entra ID bearer token
 
-    Requires AZURE_OPENAI_ENDPOINT to be set (defaults to swdn-resource).
+    Requires AZURE_OPENAI_ENDPOINT to be set.
     """
     if api_key:
         return OpenAI(base_url=AZURE_OPENAI_ENDPOINT, api_key=api_key)

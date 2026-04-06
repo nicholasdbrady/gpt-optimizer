@@ -150,8 +150,8 @@ Set via environment variables or a `.env` file (see `.env.example`):
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `AZURE_OPENAI_ENDPOINT` | `https://swdn-resource.openai.azure.com/openai/v1/` | Azure OpenAI endpoint |
-| `AZURE_AI_PROJECT_ENDPOINT` | `https://swdn-resource.services.ai.azure.com/api/projects/foundry-project` | Foundry project endpoint |
+| `AZURE_OPENAI_ENDPOINT` | — | Azure OpenAI endpoint (required) |
+| `AZURE_AI_PROJECT_ENDPOINT` | — | Foundry project endpoint |
 | `OPTIMIZER_MODEL` | `gpt-5.4` | Model used for all checker/rewriter agents |
 
 **Authentication**: Run `az login` for Microsoft Entra ID (default). Pass `--api-key <key>` to the CLI for direct API key auth.
