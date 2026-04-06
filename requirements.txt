@@ -1,3 +1,5 @@
 openai>=1.60.0
 pydantic>=2.0
 python-dotenv
+azure-identity
+azure-ai-projects>=2.0.0

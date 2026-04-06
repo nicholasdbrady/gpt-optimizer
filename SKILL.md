@@ -75,8 +75,8 @@ If the optimizer fails, diagnose and help the user:
 
 | Error | What to tell the user |
 |-------|----------------------|
-| **Authentication failure** (401, "No authentication configured") | "Run `az login` or set `OPENAI_API_KEY` to authenticate with Azure OpenAI." |
-| **API timeout or 5xx error** | "The Azure OpenAI endpoint is temporarily unavailable. Try again in a minute. If the issue persists, check https://status.openai.com." |
+| **Authentication failure** (401, "No authentication configured") | "Run `az login` to authenticate with Microsoft Entra ID." |
+| **API timeout or 5xx error** | "The Azure OpenAI endpoint is temporarily unavailable. Try again in a minute." |
 | **Rate limit (429)** | "You've hit the API rate limit. Wait 30–60 seconds and try again, or use `--mode instant` for a lighter request." |
 | **Invalid JSON output** | "The optimizer returned unexpected output. Try re-running the command. If this happens repeatedly, the prompt may contain special characters that need escaping." |
 | **Script not found** | "The optimizer script was not found at the expected path. Make sure the gpt-optimizer project is set up at `/home/nbrady/personal/nicholasdbrady/gpt-optimizer/`." |
@@ -109,8 +109,8 @@ After presenting results, offer these options so the user knows what's possible 
 
 ## Environment
 
-The optimizer uses `gpt-5.4` via Azure OpenAI (endpoint: `https://swdn-resource.openai.azure.com/openai/v1/`). It requires one of:
-- `OPENAI_API_KEY` environment variable
-- Azure `DefaultAzureCredential` (e.g., `az login`)
+The optimizer uses `gpt-5.4` via Azure OpenAI (endpoint: `https://swdn-resource.openai.azure.com/openai/v1/`).
 
-If authentication fails, tell the user to set `OPENAI_API_KEY` or run `az login`.
+**Authentication**: Run `az login` for Microsoft Entra ID (default). Alternatively, pass `--api-key <key>` for direct API key auth.
+
+If authentication fails, tell the user to run `az login`.

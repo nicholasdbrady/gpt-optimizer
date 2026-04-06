@@ -14,13 +14,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Check auth: OPENAI_API_KEY or Azure CLI
-if [[ -z "${OPENAI_API_KEY:-}" ]]; then
-    if ! az account show &>/dev/null; then
-        echo "Error: No authentication configured." >&2
-        echo "Set OPENAI_API_KEY or run 'az login' first." >&2
-        exit 1
-    fi
+# Check auth: Azure CLI (Entra ID) is the default
+if ! az account show &>/dev/null; then
+    echo "Error: Not authenticated. Run 'az login' first." >&2
+    echo "  (Or pass --api-key <key> for direct API key auth)" >&2
+    exit 1
 fi
 
 # Check python is available

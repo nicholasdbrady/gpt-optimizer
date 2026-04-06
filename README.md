@@ -1,12 +1,12 @@
 # GPT Prompt Optimizer
 
-Programmatic prompt optimization using the same multi-agent approach as OpenAI's dashboard optimizer. Uses gpt-5.4 via the OpenAI API (or Azure OpenAI).
+Programmatic prompt optimization using the same multi-agent approach as OpenAI's dashboard optimizer. Uses gpt-5.4 via Azure OpenAI with Microsoft Entra ID authentication.
 
 ## Quick Start
 
 ```bash
 pip install -e .
-export OPENAI_API_KEY=sk-your-key   # or: az login (for Azure OpenAI)
+az login                          # Microsoft Entra ID authentication
 
 python -m gpt_optimizer "You are a helpful assistant." --json
 ```
@@ -15,17 +15,16 @@ python -m gpt_optimizer "You are a helpful assistant." --json
 
 ### Python Library
 
-`optimize_prompt` is **async** and returns an `OptimizeResponse`:
+`optimize_prompt` returns an `OptimizeResponse`:
 
 ```python
-import asyncio
 from gpt_optimizer import optimize_prompt, OptimizerMode, PresetCheck
 
-# Basic optimization
-result = asyncio.run(optimize_prompt(
+# Basic optimization (uses az login credentials)
+result = optimize_prompt(
     developer_message="Your prompt here",
     mode=OptimizerMode.default,
-))
+)
 print(result.new_developer_message)
 
 # Targeted check
@@ -151,10 +150,11 @@ Set via environment variables or a `.env` file (see `.env.example`):
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPENAI_API_KEY` | — | OpenAI API key (required unless using Azure auth) |
+| `AZURE_OPENAI_ENDPOINT` | `https://swdn-resource.openai.azure.com/openai/v1/` | Azure OpenAI endpoint |
+| `AZURE_AI_PROJECT_ENDPOINT` | `https://swdn-resource.services.ai.azure.com/api/projects/foundry-project` | Foundry project endpoint |
 | `OPTIMIZER_MODEL` | `gpt-5.4` | Model used for all checker/rewriter agents |
-| `AZURE_AI_PROJECT_ENDPOINT` | — | Azure Foundry project endpoint |
-| `AZURE_OPENAI_ENDPOINT` | — | Azure OpenAI base URL |
+
+**Authentication**: Run `az login` for Microsoft Entra ID (default). Pass `--api-key <key>` to the CLI for direct API key auth.
 
 ## Background
 
