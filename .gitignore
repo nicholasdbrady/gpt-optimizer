@@ -9,3 +9,4 @@ build/
 .env
 workspace/
 .venv/
+optimize-prompt-workspace/
