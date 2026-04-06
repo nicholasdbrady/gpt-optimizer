@@ -28,16 +28,16 @@ result = optimize_prompt(
 print(result.new_developer_message)
 
 # Targeted check
-result = asyncio.run(optimize_prompt(
+result = optimize_prompt(
     developer_message="Your prompt here",
     preset_check=PresetCheck.conflicting_instructions,
-))
+)
 
 # Custom changes
-result = asyncio.run(optimize_prompt(
+result = optimize_prompt(
     developer_message="Your prompt here",
     requested_changes="Add error handling instructions",
-))
+)
 ```
 
 ### CLI
@@ -155,6 +155,38 @@ Set via environment variables or a `.env` file (see `.env.example`):
 | `OPTIMIZER_MODEL` | `gpt-5.4` | Model used for all checker/rewriter agents |
 
 **Authentication**: Run `az login` for Microsoft Entra ID (default). Pass `--api-key <key>` to the CLI for direct API key auth.
+
+## Testing
+
+### Unit tests (mocked, no API calls)
+
+```bash
+pytest -m "not live"           # 102 tests, ~1s
+```
+
+### Live integration tests (real Azure OpenAI calls)
+
+```bash
+az login                       # authenticate first
+pytest -m live -v              # 12 tests, ~90s
+```
+
+The live tests synthetically generate prompts with known defects and verify the optimizer correctly detects and fixes them:
+
+| Test | Prompt | What it verifies |
+|------|--------|-----------------|
+| **Contradiction detection** | `"Always return results as valid JSON objects. Do not use any structured output — respond in plain text only."` | Detects the JSON vs plain text contradiction and resolves it |
+| **Clean prompt passthrough** | `"You are a Python coding assistant. Help users write clean, efficient code."` | No issues found, core intent preserved |
+| **Format ambiguity** | `"Extract key information and return results in a structured format."` | Flags the vague "structured format" and adds a concrete schema |
+| **Custom changes** | `"You are a customer support agent."` + changes: `"specialize for billing disputes"` | Adds billing/refund language while preserving professional tone |
+| **Preset conflict check** | `"Keep answers under 50 words. Provide detailed explanations of at least 500 words."` | Targeted `conflicting_instructions` check finds the word count conflict |
+| **Few-shot inconsistency** | System: `"Always respond with exactly one sentence."` Example: 4-sentence response | Detects the multi-sentence example violating the one-sentence rule |
+
+### Run everything
+
+```bash
+pytest -v                      # all 114 tests (102 mocked + 12 live)
+```
 
 ## Background
 
